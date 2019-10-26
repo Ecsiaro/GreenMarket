@@ -13,5 +13,7 @@ UCLASS()
 class GREENMARKET_API AGreenMarketGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+	AGreenMarketGameModeBase();
 	
 };
