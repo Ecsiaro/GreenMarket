@@ -17,7 +17,6 @@ ASlimeCharacter::ASlimeCharacter() {
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	// Configure character movement
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true; 
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); 
