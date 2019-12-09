@@ -21,6 +21,10 @@
 		{
 			"Name": "SceneFusion",
 			"Enabled": true
+		},
+		{
+			"Name": "LiveLink",
+			"Enabled": true
 		}
 	]
 }
