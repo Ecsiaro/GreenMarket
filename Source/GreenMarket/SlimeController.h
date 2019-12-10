@@ -35,5 +35,13 @@ public:
 
 private:
 	TArray<UUserWidget*> Letters;
+
+	/*
+	 * Creates the HUD widget
+	 *
+	 * Returns reference to created HUD
+	 * 
+	 */
+	UUserWidget* CreateHUD();
 	
 };

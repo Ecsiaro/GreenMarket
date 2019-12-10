@@ -9,6 +9,10 @@
 void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
+	CreateHUD();
+}
+
+UUserWidget* ASlimeController::CreateHUD() {
 	if (ensure(WidgetHUD)) {
 		HUD = CreateWidget(this, WidgetHUD);
 		if (HUD) {
@@ -16,7 +20,7 @@ void ASlimeController::BeginPlay(){
 			for (int i = 0; i < MessageText.Len(); i++) {
 				AddLetter(MessageText[i]);
 			}
-			
+
 		}
 	}
 }
