@@ -17,21 +17,36 @@ class GREENMARKET_API ASlimeController : public APlayerController
 	virtual void BeginPlay() override;
 
 public:
+	/*
+	 * UMG widget for the HUD
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Heads Up Display")
 	TSubclassOf<UUserWidget> WidgetHUD;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Heads Up Display")
+	/*
+	 * Reference for the HUD widget
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Heads Up Display")
 	UUserWidget* HUD;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	/*
+	 * UMG widget for the Letters
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Subtitles")
 	TSubclassOf<UUserWidget> WidgetLetter;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	/*
+	 * UMG widget for the HUD
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Subtitles")
 	FString MessageText = "Hello";
 
-	
-
-	UFUNCTION(BlueprintCallable, Category = "Subtitles")
+	/*
+	 * Adds a message to the on screen text box
+	 *
+	 *  @param Message The message to display
+	 */
+	UFUNCTION(BlueprintCallable, Category="Subtitles")
 	void AddMessage(FString Message);
 
 private:
@@ -40,8 +55,7 @@ private:
 	 *
 	 * Returns true if HUD is successfully created
 	 */
-
-	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
+	UFUNCTION(BlueprintCallable, Category="Heads Up Display")
 	bool CreateHUD();
 
 	/*
@@ -49,6 +63,6 @@ private:
 	 *
 	 *  @param Letter Letter to add
 	 */
-	void AddLetter(char Letter);
+	void AddLetter(char Char);
 	
 };
