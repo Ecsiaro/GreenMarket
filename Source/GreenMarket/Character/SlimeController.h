@@ -53,6 +53,7 @@ public:
 	 *  @param Message The message to display
 	 *  @param Time The time before the next letter starts to appear
 	 */
+	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
 	void SetMessage(FString Message, float Time);
 
 private:

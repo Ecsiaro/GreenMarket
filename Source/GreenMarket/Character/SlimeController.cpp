@@ -12,6 +12,8 @@ void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
 	CreateHUD();
+
+	SetMessage("You harvested some WAMBA ARMS! You will have the ability to CLIMB WALLS until they are no longer in you!", .0001f);
 }
 
 /*
@@ -42,7 +44,7 @@ bool ASlimeController::CreateHUD() {
 void ASlimeController::SetMessage(FString Message, float Time) {
 	MessageText = Message;
 	LetterDelayInSeconds = Time;
-	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(this, HUD);
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(this, HUD, EMouseLockMode::DoNotLock);
 	MakeMessage();
 	
 }
@@ -74,7 +76,7 @@ void ASlimeController::MakeMessage() {
 	TextBox->AddChildToWrapBox(WLetter);
 	
 	//  Incrementing index
-	CurrentIndex += 1;
+	CurrentIndex++;
 
 	// Looping after a delay
 	GetWorld()->GetTimerManager().SetTimer(LetterTimer, this, &ASlimeController::MakeMessage, LetterDelayInSeconds);
