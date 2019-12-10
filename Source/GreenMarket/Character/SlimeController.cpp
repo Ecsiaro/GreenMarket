@@ -11,9 +11,6 @@
 
 void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
-
-	CreateHUD();
-
 }
 
 /*
@@ -54,39 +51,52 @@ void ASlimeController::SetMessage(FString Message, float Time) {
  *
  */
 void ASlimeController::MakeMessage() {
-	//Checking if we should exit
+	// Checking if we should exit
 	if(LetterIndex >= MessageText.Len()) {
 		LetterIndex = 0;
 		return;
 	}
-	
+
+	// Get the text box from the HUd
 	UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
+	//If there isn't a text box on the HUD, return
 	if (!TextBox) return;
-	
+
+	//If no current word, create one and add it to the text box
 	if(!WWord) {
 		WWord = CreateWidget(this, WidgetWord);
 		TextBox->AddChildToWrapBox(WWord);
 	}
 
+	// Get the box for the letters to go in to form a word
 	UHorizontalBox* WordBox = Cast<UHorizontalBox>(WWord->GetWidgetFromName(TEXT("WordBox")));
 	WordBox->AddChildToHorizontalBox(MakeLetter(MessageText[LetterIndex]));
 
+	// If at a space, or the end of the string, end the current word
 	if (MessageText[LetterIndex] == ' ' || LetterIndex + 1 == MessageText.Len()) {
 		WWord = nullptr;
 		WordIndex++;
 	}
 	
-	//  Incrementing index
+	// Incrementing index
 	LetterIndex++;
 
 	// Looping after a delay
 	GetWorld()->GetTimerManager().SetTimer(LetterTimer, this, &ASlimeController::MakeMessage, LetterDelayInSeconds);
 }
 
+/*
+ * Groups letter into a word
+ *
+ *  @param Char The letter for the widget text to be set to
+ */
 UUserWidget* ASlimeController::MakeLetter(char Char) {
 	FString CurrentLetter = "";
+	
 	// Setting string to desired character because FTexts don't convert any char types directly :(
 	CurrentLetter.AppendChar(MessageText[LetterIndex]);
+
+	//Creating the letter widget and setting the text to the desired char
 	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
 	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
 	Text->SetText(FText::FromString(CurrentLetter));
