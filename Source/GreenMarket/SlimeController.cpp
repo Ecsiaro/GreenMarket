@@ -5,12 +5,13 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "MyWrapBox.h"
+#include "TimerManager.h"
 
 void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
 	CreateHUD();
-	AddMessage(MessageText);
+	SetMessage(MessageDebug);
 }
 
 /*
@@ -21,15 +22,21 @@ void ASlimeController::BeginPlay(){
 bool ASlimeController::CreateHUD() {
 	if (ensure(WidgetHUD)) {
 		HUD = CreateWidget(this, WidgetHUD);
-		//If HUD is created correctly
+		// If HUD is created correctly
 		if (HUD) {
 			HUD->AddToViewport();
-			//Only return true if the HUD is created AND added to viewport correctly
+			// Only return true if the HUD is created AND added to viewport correctly
 			return true;
 		}
 	}
-	//Returns false if not created AND added correctly
+	// Returns false if not created AND added correctly
 	return false;
+}
+
+void ASlimeController::SetMessage(FString Message) {
+	MessageText = Message;
+	MakeMessage();
+	
 }
 
 /*
@@ -37,28 +44,32 @@ bool ASlimeController::CreateHUD() {
  *
  *  @param Message The message to display
  */
-void ASlimeController::AddMessage(FString Message) {
-	for (int i = 0; i < Message.Len(); i++) {
-		AddLetter(Message[i]);
+void ASlimeController::MakeMessage() {
+	//Checking if we should exit
+	if(CurrentIndex >= MessageText.Len()) {
+		CurrentIndex = 0;
+		return;
 	}
-}
-
-/*
- * Adds a letter to the text box on HUD
- *
- *  @param Letter Letter to add
- */
-void ASlimeController::AddLetter(char Char) {
+	
 	// Initialising local variables
 	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
 	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
 	UMyWrapBox* TextBox = Cast<UMyWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
 	FString CurrentLetter = "";
 
-	// Setting string to desired character because FTexts don't convert chars directly :(
-	CurrentLetter.AppendChar(Char);
+	// Setting string to desired character because FTexts don't convert any chars directly :(
+	CurrentLetter.AppendChar(MessageText[CurrentIndex]);
 	Text->SetText(FText::FromString(CurrentLetter));
+	
 	// Returns if there is no text box on HUD
 	if (!TextBox) return;
+	
 	TextBox->AddChildToWrapBox(WLetter);
+	
+	//  Incrementing index
+	CurrentIndex += 1;
+
+	// Looping after a delay
+	GetWorld()->GetTimerManager().SetTimer(LetterTimer, this, &ASlimeController::MakeMessage, LetterDelayInSeconds);
 }
+

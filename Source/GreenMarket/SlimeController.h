@@ -36,18 +36,18 @@ public:
 	TSubclassOf<UUserWidget> WidgetLetter;
 
 	/*
-	 * UMG widget for the HUD
+	 * Delay between letters appearing
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Subtitles")
-	FString MessageText = "Hello";
+	float LetterDelayInSeconds = 1.0f;
 
 	/*
-	 * Adds a message to the on screen text box
-	 *
-	 *  @param Message The message to display
+	 * FOR DEBUG ONLY
 	 */
-	UFUNCTION(BlueprintCallable, Category="Subtitles")
-	void AddMessage(FString Message);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	FString MessageDebug = "";
+
+	void SetMessage(FString Message);
 
 private:
 	/*
@@ -59,10 +59,21 @@ private:
 	bool CreateHUD();
 
 	/*
-	 * Adds a letter to the text box on HUD
+	 * Adds a message to the on screen text box
 	 *
-	 *  @param Letter Letter to add
+	 *  @param Message The message to display
 	 */
-	void AddLetter(char Char);
+	void MakeMessage();
+
+	/*
+	 * Holds the current message
+	 */
+	FString MessageText = "";
+
+	/*
+	 * Variables for message loop
+	 */
+	int CurrentIndex = 0;
+	FTimerHandle LetterTimer;
 	
 };
