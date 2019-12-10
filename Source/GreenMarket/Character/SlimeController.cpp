@@ -61,25 +61,20 @@ void ASlimeController::MakeMessage() {
 		return;
 	}
 	
-	// Initialising local variables
-	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
-	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
-	FString CurrentLetter = "";
+	UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
+	if (!TextBox) return;
+	
+	if(!WWord) {
+		WWord = CreateWidget(this, WidgetWord);
+		TextBox->AddChildToWrapBox(WWord);
+	}
 
-	// Setting string to desired character because FTexts don't convert any char types directly :(
-	CurrentLetter.AppendChar(MessageText[LetterIndex]);
-	Text->SetText(FText::FromString(CurrentLetter));
-
-	LetterArray.Add(WLetter);
+	UHorizontalBox* WordBox = Cast<UHorizontalBox>(WWord->GetWidgetFromName(TEXT("WordBox")));
+	WordBox->AddChildToHorizontalBox(MakeLetter(MessageText[LetterIndex]));
 
 	if (MessageText[LetterIndex] == ' ' || LetterIndex + 1 == MessageText.Len()) {
-		UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
-		// Returns if there is no text box on HUD
-		if (!TextBox) return;
-		UUserWidget* WWord = MakeWord(LetterArray);
-		TextBox->AddChildToWrapBox(WWord);
+		WWord = nullptr;
 		WordIndex++;
-		LetterArray.Empty();
 	}
 	
 	//  Incrementing index
@@ -89,12 +84,14 @@ void ASlimeController::MakeMessage() {
 	GetWorld()->GetTimerManager().SetTimer(LetterTimer, this, &ASlimeController::MakeMessage, LetterDelayInSeconds);
 }
 
-UUserWidget* ASlimeController::MakeWord(TArray<UUserWidget*> LetterArray) {
-	UUserWidget* WWord = CreateWidget(this, WidgetWord);
-	for (UUserWidget* Letter : LetterArray) {
-		UHorizontalBox* WordBox = Cast<UHorizontalBox>(WWord->GetWidgetFromName("WordBox"));
-		WordBox->AddChildToHorizontalBox(Letter);
-	}
-	return WWord;
+UUserWidget* ASlimeController::MakeLetter(char Char) {
+	FString CurrentLetter = "";
+	// Setting string to desired character because FTexts don't convert any char types directly :(
+	CurrentLetter.AppendChar(MessageText[LetterIndex]);
+	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
+	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
+	Text->SetText(FText::FromString(CurrentLetter));
+	
+	return WLetter;
 }
 

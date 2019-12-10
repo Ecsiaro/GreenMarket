@@ -81,16 +81,19 @@ private:
 	/*
 	 * Groups letter into a word
 	 *
-	 *  @param LetterArray An array of letters to add to the word
+	 *  @param Char The letter for the widget text to be set to
 	 */
-	UUserWidget* MakeWord(TArray<UUserWidget*> LetterArray);
-
-	TArray<UUserWidget*> LetterArray = {};
+	UUserWidget* MakeLetter(char Char);
 
 	/*
 	 * Holds the current message
 	 */
 	FString MessageText = "";
+
+	/*
+	 * Holds the current word widget
+	 */
+	UUserWidget* WWord;
 
 	/*
 	 * Variables for message loop
