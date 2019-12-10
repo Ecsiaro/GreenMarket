@@ -47,7 +47,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
 	FString MessageDebug = "";
 
-	void SetMessage(FString Message);
+	/*
+	 * Adds a message to the on screen text box
+	 *
+	 *  @param Message The message to display
+	 *  @param Time The time before the next letter starts to appear
+	 */
+	void SetMessage(FString Message, float Time);
 
 private:
 	/*

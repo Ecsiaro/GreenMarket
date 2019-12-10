@@ -4,14 +4,14 @@
 #include "SlimeController.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
-#include "MyWrapBox.h"
+#include "Components/WrapBox.h"
 #include "TimerManager.h"
 
 void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
 	CreateHUD();
-	SetMessage(MessageDebug);
+	SetMessage(MessageDebug, LetterDelayInSeconds);
 }
 
 /*
@@ -33,16 +33,22 @@ bool ASlimeController::CreateHUD() {
 	return false;
 }
 
-void ASlimeController::SetMessage(FString Message) {
+/*
+ * Adds a message to the on screen text box
+ *
+ *  @param Message The message to display
+ *  @param Time The time before the next letter starts to appear
+ */
+void ASlimeController::SetMessage(FString Message, float Time) {
 	MessageText = Message;
+	LetterDelayInSeconds = Time;
 	MakeMessage();
 	
 }
 
 /*
- * Adds a message to the on screen text box
+ * Adds the message to the on screen text box
  *
- *  @param Message The message to display
  */
 void ASlimeController::MakeMessage() {
 	//Checking if we should exit
@@ -54,7 +60,7 @@ void ASlimeController::MakeMessage() {
 	// Initialising local variables
 	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
 	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
-	UMyWrapBox* TextBox = Cast<UMyWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
+	UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
 	FString CurrentLetter = "";
 
 	// Setting string to desired character because FTexts don't convert any chars directly :(
