@@ -14,7 +14,6 @@ void ASlimeController::BeginPlay(){
 
 	CreateHUD();
 
-	SetMessage("You harvested some WAMBA ARMS! You have the ability to CLIMB WALLS until they are no longer in you!", .02f);
 }
 
 /*
