@@ -24,16 +24,22 @@ public:
 	TSubclassOf<UUserWidget> WidgetHUD;
 
 	/*
+	 * UMG widget for the Letters
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	TSubclassOf<UUserWidget> WidgetLetter;
+
+	/*
+	 * UMG widget for the Words
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	TSubclassOf<UUserWidget> WidgetWord;
+
+	/*
 	 * Reference for the HUD widget
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Heads Up Display")
 	UUserWidget* HUD;
-
-	/*
-	 * UMG widget for the Letters
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Subtitles")
-	TSubclassOf<UUserWidget> WidgetLetter;
 
 	/*
 	 * Delay between letters appearing
@@ -73,6 +79,15 @@ private:
 	void MakeMessage();
 
 	/*
+	 * Groups letter into a word
+	 *
+	 *  @param LetterArray An array of letters to add to the word
+	 */
+	UUserWidget* MakeWord(TArray<UUserWidget*> LetterArray);
+
+	TArray<UUserWidget*> LetterArray = {};
+
+	/*
 	 * Holds the current message
 	 */
 	FString MessageText = "";
@@ -80,7 +95,8 @@ private:
 	/*
 	 * Variables for message loop
 	 */
-	int CurrentIndex = 0;
+	int LetterIndex = 0;
+	int WordIndex = 0;
 	FTimerHandle LetterTimer;
 	
 };

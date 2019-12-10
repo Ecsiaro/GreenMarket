@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "Components/WrapBox.h"
+#include "Components/HorizontalBox.h"
 #include "TimerManager.h"
 #include "WidgetBlueprintLibrary.h"
 
@@ -13,7 +14,7 @@ void ASlimeController::BeginPlay(){
 
 	CreateHUD();
 
-	SetMessage("You harvested some WAMBA ARMS! You will have the ability to CLIMB WALLS until they are no longer in you!", .0001f);
+	SetMessage("You harvested some WAMBA ARMS! You have the ability to CLIMB WALLS until they are no longer in you!", .02f);
 }
 
 /*
@@ -22,7 +23,7 @@ void ASlimeController::BeginPlay(){
  * Returns true if HUD is successfully created
  */
 bool ASlimeController::CreateHUD() {
-	if (ensure(WidgetHUD)) {
+	if (WidgetHUD) {
 		HUD = CreateWidget(this, WidgetHUD);
 		// If HUD is created correctly
 		if (HUD) {
@@ -55,30 +56,45 @@ void ASlimeController::SetMessage(FString Message, float Time) {
  */
 void ASlimeController::MakeMessage() {
 	//Checking if we should exit
-	if(CurrentIndex >= MessageText.Len()) {
-		CurrentIndex = 0;
+	if(LetterIndex >= MessageText.Len()) {
+		LetterIndex = 0;
 		return;
 	}
 	
 	// Initialising local variables
 	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
 	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
-	UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
 	FString CurrentLetter = "";
 
-	// Setting string to desired character because FTexts don't convert any chars directly :(
-	CurrentLetter.AppendChar(MessageText[CurrentIndex]);
+	// Setting string to desired character because FTexts don't convert any char types directly :(
+	CurrentLetter.AppendChar(MessageText[LetterIndex]);
 	Text->SetText(FText::FromString(CurrentLetter));
-	
-	// Returns if there is no text box on HUD
-	if (!TextBox) return;
-	
-	TextBox->AddChildToWrapBox(WLetter);
+
+	LetterArray.Add(WLetter);
+
+	if (MessageText[LetterIndex] == ' ' || LetterIndex + 1 == MessageText.Len()) {
+		UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
+		// Returns if there is no text box on HUD
+		if (!TextBox) return;
+		UUserWidget* WWord = MakeWord(LetterArray);
+		TextBox->AddChildToWrapBox(WWord);
+		WordIndex++;
+		LetterArray.Empty();
+	}
 	
 	//  Incrementing index
-	CurrentIndex++;
+	LetterIndex++;
 
 	// Looping after a delay
 	GetWorld()->GetTimerManager().SetTimer(LetterTimer, this, &ASlimeController::MakeMessage, LetterDelayInSeconds);
+}
+
+UUserWidget* ASlimeController::MakeWord(TArray<UUserWidget*> LetterArray) {
+	UUserWidget* WWord = CreateWidget(this, WidgetWord);
+	for (UUserWidget* Letter : LetterArray) {
+		UHorizontalBox* WordBox = Cast<UHorizontalBox>(WWord->GetWidgetFromName("WordBox"));
+		WordBox->AddChildToHorizontalBox(Letter);
+	}
+	return WWord;
 }
 
