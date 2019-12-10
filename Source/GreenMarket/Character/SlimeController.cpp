@@ -6,12 +6,12 @@
 #include "Components/TextBlock.h"
 #include "Components/WrapBox.h"
 #include "TimerManager.h"
+#include "WidgetBlueprintLibrary.h"
 
 void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
 	CreateHUD();
-	SetMessage(MessageDebug, LetterDelayInSeconds);
 }
 
 /*
@@ -42,6 +42,7 @@ bool ASlimeController::CreateHUD() {
 void ASlimeController::SetMessage(FString Message, float Time) {
 	MessageText = Message;
 	LetterDelayInSeconds = Time;
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(this, HUD);
 	MakeMessage();
 	
 }
