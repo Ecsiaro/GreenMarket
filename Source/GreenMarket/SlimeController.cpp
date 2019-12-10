@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// We got no rights, just please don't steal
 
 
 #include "SlimeController.h"
@@ -10,28 +10,33 @@ void ASlimeController::BeginPlay(){
 	Super::BeginPlay();
 
 	CreateHUD();
+	AddMessage("Hello World!");
 }
 
-UUserWidget* ASlimeController::CreateHUD() {
+bool ASlimeController::CreateHUD() {
 	if (ensure(WidgetHUD)) {
 		HUD = CreateWidget(this, WidgetHUD);
 		if (HUD) {
 			HUD->AddToViewport();
-			for (int i = 0; i < MessageText.Len(); i++) {
-				AddLetter(MessageText[i]);
-			}
-
+			return true;
 		}
+	}
+	return false;
+}
+
+void ASlimeController::AddMessage(FString Message) {
+	for (int i = 0; i < Message.Len(); i++) {
+		AddLetter(Message[i]);
 	}
 }
 
-void ASlimeController::AddLetter(char letter) {
+void ASlimeController::AddLetter(char Letter) {
 	FString CurrentLetter = "";
-	CurrentLetter.AppendChar(letter);
-	UUserWidget* Letter = CreateWidget(this, WidgetLetter);
-	UTextBlock* Text = Cast<UTextBlock>(Letter->GetWidgetFromName(TEXT("Letter")));
+	CurrentLetter.AppendChar(Letter);
+	UUserWidget* WLetter = CreateWidget(this, WidgetLetter);
+	UTextBlock* Text = Cast<UTextBlock>(WLetter->GetWidgetFromName(TEXT("Letter")));
 	Text->SetText(FText::FromString(CurrentLetter));
 	UMyWrapBox* TextBox = Cast<UMyWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
 	if (!TextBox) return;
-	TextBox->AddChildToWrapBox(Letter);
+	TextBox->AddChildToWrapBox(WLetter);
 }

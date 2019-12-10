@@ -1,3 +1,5 @@
+//We got no rights, just please don't steal
+
 #include "SlimeCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/WrapBox.h"
-#include "MyWrapBox.generated.h"
+#include "Components/TextBlock.h"
+#include "MyTextBlock.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GREENMARKET_API UMyWrapBox : public UWrapBox
+class GREENMARKET_API UMyTextBlock : public UTextBlock
 {
 	GENERATED_BODY()
 	

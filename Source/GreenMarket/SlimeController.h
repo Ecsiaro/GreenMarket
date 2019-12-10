@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// We got no rights, just please don't steal
 
 #pragma once
 
@@ -29,19 +29,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
 	FString MessageText = "Hello";
 
-	void AddLetter(char index);
+	
 
-	TArray<FName> SlotNames;
+	UFUNCTION(BlueprintCallable, Category = "Subtitles")
+	void AddMessage(FString Message);
 
 private:
-	TArray<UUserWidget*> Letters;
-
 	/*
 	 * Creates the HUD widget
 	 *
-	 * Returns reference to created HUD
-	 * 
+	 * Returns true if HUD is successfully created
 	 */
-	UUserWidget* CreateHUD();
+
+	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
+	bool CreateHUD();
+
+	/*
+	 * Adds a letter to the text box on HUD
+	 *
+	 *  @param Letter Letter to add
+	 */
+	void AddLetter(char Letter);
 	
 };

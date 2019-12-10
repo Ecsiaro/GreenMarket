@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// We got no rights, just please don't steal
 
 #include "GreenMarket.h"
 #include "Modules/ModuleManager.h"
