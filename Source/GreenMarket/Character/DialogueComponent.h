@@ -24,34 +24,28 @@ public:
 	TSubclassOf<class UUserWidget> WidgetHUD;
 
 	/*
+	 * Reference for the HUD widget
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Heads Up Display")
+	UUserWidget* DialogueHUD;
+
+	/*
 	 * UMG widget for the Letters
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue|Subtitles")
 	TSubclassOf<UUserWidget> WidgetLetter;
 
 	/*
 	 * UMG widget for the Words
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue|Subtitles")
 	TSubclassOf<UUserWidget> WidgetWord;
-
-	/*
-	 * Reference for the HUD widget
-	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Heads Up Display")
-	UUserWidget* HUD;
 
 	/*
 	 * Delay between letters appearing
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue|Subtitles")
 	float LetterDelayInSeconds = 1.0f;
-
-	/*
-	 * FOR DEBUG ONLY
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subtitles")
-	FString MessageDebug = "";
 
 	/*
 	 * Adds a message to the on screen text box
@@ -59,17 +53,23 @@ public:
 	 *  @param Message The message to display
 	 *  @param Time The time before the next letter starts to appear
 	 */
-	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
+	UFUNCTION(BlueprintCallable, Category = "Dialogue|Subtitles")
 	void SetMessage(FString Message, float Time);
 
 private:
 	/*
-	 * Creates the HUD widget
+	 * Creates the dialogue HUD widget
 	 *
 	 * Returns true if HUD is successfully created
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
 	bool CreateHUD();
+	
+	/*
+	 * Destroys the dialogue HUD widget
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
+	void DestroyHUD() const;
 
 	/*
 	 * Adds a message to the on screen text box
@@ -83,7 +83,7 @@ private:
 	 *
 	 *  @param Char The letter for the widget text to be set to
 	 */
-	UUserWidget* MakeLetter(char Char);
+	UUserWidget* MakeLetter();
 
 	/*
 	 * Holds the current message

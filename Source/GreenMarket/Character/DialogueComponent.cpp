@@ -26,10 +26,10 @@ UDialogueComponent::UDialogueComponent()
  */
 bool UDialogueComponent::CreateHUD() {
 	if (WidgetHUD) {
-		HUD = CreateWidget(GetWorld()->GetFirstPlayerController(), WidgetHUD);
+		DialogueHUD = CreateWidget(GetWorld()->GetFirstPlayerController(), WidgetHUD);
 		// If HUD is created correctly
-		if (HUD) {
-			HUD->AddToViewport();
+		if (DialogueHUD) {
+			DialogueHUD->AddToViewport();
 			// Only return true if the HUD is created AND added to viewport correctly
 			return true;
 		}
@@ -39,15 +39,25 @@ bool UDialogueComponent::CreateHUD() {
 }
 
 /*
+ * Destroys the dialogue HUD widget
+ */
+void UDialogueComponent::DestroyHUD() const {
+	if (DialogueHUD) {
+		DialogueHUD->RemoveFromParent();
+		CollectGarbage(EObjectFlags::RF_NoFlags);
+	}
+}
+
+/*
  * Adds a message to the on screen text box
  *
  *  @param Message The message to display
  *  @param Time The time before the next letter starts to appear
  */
-void UDialogueComponent::SetMessage(FString Message, float Time) {
+void UDialogueComponent::SetMessage(const FString Message, const float Time) {
 	MessageText = Message;
 	LetterDelayInSeconds = Time;
-	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(GetWorld()->GetFirstPlayerController(), HUD, EMouseLockMode::DoNotLock);
+	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(GetWorld()->GetFirstPlayerController(), DialogueHUD, EMouseLockMode::DoNotLock);
 	MakeMessage();
 
 }
@@ -64,7 +74,7 @@ void UDialogueComponent::MakeMessage() {
 	}
 
 	// Get the text box from the HUd
-	UWrapBox* TextBox = Cast<UWrapBox>(HUD->GetWidgetFromName(TEXT("TextBox")));
+	UWrapBox* TextBox = Cast<UWrapBox>(DialogueHUD->GetWidgetFromName(TEXT("TextBox")));
 	//If there isn't a text box on the HUD, return
 	if (!TextBox) return;
 
@@ -76,7 +86,7 @@ void UDialogueComponent::MakeMessage() {
 
 	// Get the box for the letters to go in to form a word
 	UHorizontalBox* WordBox = Cast<UHorizontalBox>(WWord->GetWidgetFromName(TEXT("WordBox")));
-	WordBox->AddChildToHorizontalBox(MakeLetter(MessageText[LetterIndex]));
+	WordBox->AddChildToHorizontalBox(MakeLetter());
 
 	// If at a space, or the end of the string, end the current word
 	if (MessageText[LetterIndex] == ' ' || LetterIndex + 1 == MessageText.Len()) {
@@ -96,7 +106,7 @@ void UDialogueComponent::MakeMessage() {
  *
  *  @param Char The letter for the widget text to be set to
  */
-UUserWidget* UDialogueComponent::MakeLetter(char Char) {
+UUserWidget* UDialogueComponent::MakeLetter() {
 	FString CurrentLetter = "";
 
 	// Setting string to desired character because FTexts don't convert any char types directly :(
