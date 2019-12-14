@@ -10,8 +10,7 @@
 #include "WidgetBlueprintLibrary.h"
 
 // Sets default values for this component's properties
-UDialogueComponent::UDialogueComponent()
-{
+UDialogueComponent::UDialogueComponent() {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
@@ -103,8 +102,6 @@ void UDialogueComponent::MakeMessage() {
 
 /*
  * Groups letter into a word
- *
- *  @param Char The letter for the widget text to be set to
  */
 UUserWidget* UDialogueComponent::MakeLetter() {
 	FString CurrentLetter = "";

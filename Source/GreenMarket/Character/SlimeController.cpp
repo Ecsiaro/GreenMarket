@@ -3,7 +3,7 @@
 
 #include "SlimeController.h"
 
-void ASlimeController::BeginPlay(){
+void ASlimeController::BeginPlay() {
 	Super::BeginPlay();
 
 }

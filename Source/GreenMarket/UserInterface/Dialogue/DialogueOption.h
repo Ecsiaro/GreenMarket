@@ -10,8 +10,15 @@
  * 
  */
 UCLASS()
-class GREENMARKET_API UDialogueOption : public UButton
-{
+class GREENMARKET_API UDialogueOption : public UButton {
 	GENERATED_BODY()
+
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "Dialogue|Subtitles")
+	void FindText();
+	
+private:
+	class UTextBlock* Text;
 	
 };

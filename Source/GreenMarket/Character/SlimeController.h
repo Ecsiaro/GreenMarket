@@ -10,8 +10,7 @@
  * 
  */
 UCLASS()
-class GREENMARKET_API ASlimeController : public APlayerController
-{
+class GREENMARKET_API ASlimeController : public APlayerController {
 	GENERATED_BODY()
 
 	virtual void BeginPlay() override;

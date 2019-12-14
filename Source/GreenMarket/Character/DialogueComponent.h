@@ -8,8 +8,7 @@
 
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class GREENMARKET_API UDialogueComponent : public UActorComponent
-{
+class GREENMARKET_API UDialogueComponent : public UActorComponent {
 	GENERATED_BODY()
 
 public:	
