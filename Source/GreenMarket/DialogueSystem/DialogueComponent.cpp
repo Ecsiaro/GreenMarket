@@ -10,6 +10,7 @@
 #include "WidgetBlueprintLibrary.h"
 #include "Engine/DataTable.h"
 #include "DialogueSystem/DialogueTable.h"
+#include "Components/Spacer.h"
 
 // Sets default values for this component's properties
 UDialogueComponent::UDialogueComponent() {
