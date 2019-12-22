@@ -8,6 +8,8 @@
 #include "Components/HorizontalBox.h"
 #include "TimerManager.h"
 #include "WidgetBlueprintLibrary.h"
+#include "Engine/DataTable.h"
+#include "DialogueSystem/DialogueTable.h"
 
 // Sets default values for this component's properties
 UDialogueComponent::UDialogueComponent() {
@@ -15,7 +17,6 @@ UDialogueComponent::UDialogueComponent() {
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
 }
 
 /*
@@ -29,6 +30,7 @@ bool UDialogueComponent::CreateHUD() {
 		// If HUD is created correctly
 		if (DialogueHUD) {
 			DialogueHUD->AddToViewport();
+			UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(GetWorld()->GetFirstPlayerController(), DialogueHUD, EMouseLockMode::DoNotLock);
 			// Only return true if the HUD is created AND added to viewport correctly
 			return true;
 		}
@@ -42,6 +44,7 @@ bool UDialogueComponent::CreateHUD() {
  */
 void UDialogueComponent::DestroyHUD() const {
 	if (DialogueHUD) {
+		UWidgetBlueprintLibrary::SetInputMode_GameOnly(GetWorld()->GetFirstPlayerController());
 		DialogueHUD->RemoveFromParent();
 		CollectGarbage(EObjectFlags::RF_NoFlags);
 	}
@@ -50,15 +53,15 @@ void UDialogueComponent::DestroyHUD() const {
 /*
  * Adds a message to the on screen text box
  *
- *  @param Message The message to display
+ *  @param DialogueEntry The entry of the dialogue table that stores the message details
  *  @param Time The time before the next letter starts to appear
  */
-void UDialogueComponent::SetMessage(const FString Message, const float Time) {
-	MessageText = Message;
+void UDialogueComponent::SetMessage(const FName DialogueEntry, const float Time) {
+	FString ContextString = "";
+	FDialogueTable* DialogueRow = DialogueTable->FindRow<FDialogueTable>(DialogueEntry, ContextString);
+	MessageText = DialogueRow->DialogueText;
 	LetterDelayInSeconds = Time;
-	UWidgetBlueprintLibrary::SetInputMode_UIOnlyEx(GetWorld()->GetFirstPlayerController(), DialogueHUD, EMouseLockMode::DoNotLock);
 	MakeMessage();
-
 }
 
 /*
@@ -72,7 +75,7 @@ void UDialogueComponent::MakeMessage() {
 		return;
 	}
 
-	// Get the text box from the HUd
+	// Get the text box from the HUD
 	UWrapBox* TextBox = Cast<UWrapBox>(DialogueHUD->GetWidgetFromName(TEXT("TextBox")));
 	//If there isn't a text box on the HUD, return
 	if (!TextBox) return;
@@ -117,4 +120,12 @@ UUserWidget* UDialogueComponent::MakeLetter() {
 	return WLetter;
 }
 
-
+void UDialogueComponent::ClearMessage() {
+	MessageText.Empty();
+	// Get the text box from the HUD
+	UWrapBox* TextBox = Cast<UWrapBox>(DialogueHUD->GetWidgetFromName(TEXT("TextBox")));
+	for (UWidget* Word : TextBox->GetAllChildren()) {
+		Word->RemoveFromParent();
+		CollectGarbage(EObjectFlags::RF_NoFlags);
+	}
+}

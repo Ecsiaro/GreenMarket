@@ -45,15 +45,21 @@ public:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue|Subtitles")
 	float LetterDelayInSeconds = 1.0f;
+	
+	/*
+	 * Data table containing dialogue data
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue")
+	class UDataTable* DialogueTable;
 
 	/*
 	 * Adds a message to the on screen text box
 	 *
-	 *  @param Message The message to display
+	 *  @param DialogueEntry The entry of the dialogue table that stores the message details
 	 *  @param Time The time before the next letter starts to appear
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Dialogue|Subtitles")
-	void SetMessage(FString Message, float Time);
+	void SetMessage(FName DialogueEntry, float Time);
 
 private:
 	/*
@@ -69,6 +75,9 @@ private:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Heads Up Display")
 	void DestroyHUD() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Dialogue")
+	void ClearMessage();
 
 	/*
 	 * Adds a message to the on screen text box

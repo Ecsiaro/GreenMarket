@@ -7,7 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "DialogueComponent.h"
+#include "DialogueSystem\DialogueComponent.h"
 
 ASlimeCharacter::ASlimeCharacter() {
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
