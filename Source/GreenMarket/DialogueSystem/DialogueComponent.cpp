@@ -36,7 +36,7 @@ bool UDialogueComponent::CreateHUD() {
 			return true;
 		}
 	}
-	// Returns false if not created AND added correctly
+	// Returns false if not created AND not added correctly
 	return false;
 }
 
